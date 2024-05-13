@@ -43,6 +43,8 @@ def set_receiver_gain_to_maximum():
     # Set RxGain[2:0] bits to maximum value (111) for 48 dB gain
     write_register(0x26, (0x07 << 4))
 
+''' probat umjesto 0x07 napisati 0x70'''
+
 #3. metoda
 class PCD_RxGain:
     RxGain_18dB = 0b000
@@ -52,8 +54,11 @@ class PCD_RxGain:
     RxGain_43dB = 0b110
     RxGain_48dB = 0b111
 
+'''def PCD_GetAntennaGain():
+    return read_register(0x26) & 0b111ž'''
+
 def PCD_GetAntennaGain():
-    return read_register(0x26) & 0b111
+    return (read_register(0x26) >> 4) & 0b111 
 
 def PCD_SetAntennaGain(gain):
     current_value = read_register(0x26)  # 0x26 is the address of RFCfgReg
