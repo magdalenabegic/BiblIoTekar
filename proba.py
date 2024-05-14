@@ -1,11 +1,17 @@
+#!/usr/bin/env python3
+
 import RPi.GPIO as GPIO
 from mfrc522 import SimpleMFRC522
-import sqlite3
+import libsql_experimental as libsql
 import spidev
 import time
 import customtkinter
 import tkinter as tk
+from dotenv import load_dotenv
 from tkinter import simpledialog
+import os
+
+load_dotenv()
 
 # Tkinter system settings
 customtkinter.set_appearance_mode('Dark')
@@ -18,9 +24,16 @@ spi.open(0, 0)  # Parametri (bus, device)
 reader = SimpleMFRC522()
 
 # Povezivanje na bazu
-conn = sqlite3.connect('library.db')
-
+DB_NAME = os.getenv("TURSO_DATABASE_URL", 'library.db')
+DB_AUTH_TOKEN = os.getenv("TURSO_AUTH_TOKEN", None)
+print(f"DB_NAME={DB_NAME} | DB_AUTH_TOKEN={DB_AUTH_TOKEN}")
 rfid_id = None  # Globalna varijabla
+
+def db_exec(*args):
+    conn = libsql.connect(database=DB_NAME, auth_token=DB_AUTH_TOKEN)
+    res = conn.execute(*args)
+    conn.commit()
+    return res
 
 def add_book():
     global rfid_id  # Dodano da se koristi globalna varijabla
@@ -30,11 +43,9 @@ def add_book():
     naslov = simpledialog.askstring('Unos nove knjige', 'Naslov:')
     godina = simpledialog.askstring('Unos nove knjige', 'Godina izdanja:')
 
-    cursor = conn.cursor()
     # Ubacivanje informacija u bazu
-    cursor.execute('INSERT INTO books (rfid_id, autor, naslov, godina) VALUES (?, ?, ?, ?)',
+    db_exec('INSERT INTO books (rfid_id, autor, naslov, godina) VALUES (?, ?, ?, ?)',
                    (rfid_id, autor, naslov, godina))
-    conn.commit()
 
     print('Informacije o knjizi prije unosa u bazu:')
     print('Autor:', autor)
@@ -42,9 +53,7 @@ def add_book():
     print('Godina izdanja:', godina)
 
 def get_book_data(rfid_id):
-    cursor = conn.cursor()
-    cursor.execute('SELECT * FROM books WHERE rfid_id=?', (rfid_id,))
-    result = cursor.fetchone()
+    result = db_exec('SELECT * FROM books WHERE rfid_id=?', (rfid_id,)).fetchone()
     if result:
         return {'autor': result[1], 'naslov': result[2], 'godina': result[3], 'rfid_id': result[4]}
     else:
@@ -68,7 +77,7 @@ author_var = tk.StringVar()
 title_var = tk.StringVar()
 year_var = tk.StringVar()
 
-# Labeli za autor, naslov i godinu izdanja
+# Labele za autore, naslove i godine izdanja
 label_author = tk.Label(info_frame, text='Autor: ')
 label_author.pack()
 
@@ -79,6 +88,16 @@ label_year = tk.Label(info_frame, text='Godina izdanja: ')
 label_year.pack()
 
 try:
+    reader.READER.Write_MFRC522(0x26, 127)
+    db_exec("""
+CREATE TABLE IF NOT EXISTS books (
+	id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	autor TEXT,
+	naslov TEXT,
+	godina INTEGER,
+    rfid_id INTEGER
+);
+""")
     while True:
         app.update_idletasks()
         app.update()
@@ -90,7 +109,7 @@ try:
         # Dohvaćanje podataka iz baze
         book_data = get_book_data(rfid_id)
 
-        # Provjera jesu li svi podaci nepoznati
+        # Provjera jesu li svi podatci nepoznati
         all_unknown = all(value is None for value in book_data.values())
 
         # Ako knjiga nije pronađena, pitati korisnika za unos podataka
@@ -99,7 +118,7 @@ try:
             add_book()
             print('Podatci o knjizi su dodani na RFID oznaku.')
 
-        # Ažuriranje labela s podacima o knjizi
+        # Ažuriranje labela s podatcima o knjizi
         label_author.config(text='Autor: {}'.format(book_data.get('autor', 'Nepoznat')))
         label_title.config(text='Naslov: {}'.format(book_data.get('naslov', 'Nepoznat')))
         label_year.config(text='Godina izdanja: {}'.format(book_data.get('godina', 'Nepoznata')))
@@ -107,9 +126,8 @@ try:
         #time.sleep(3)
 
 except KeyboardInterrupt:
-    pass
+    os.exit(1)
 
 finally:
-    conn.close()
     GPIO.cleanup()
     app.destroy()
