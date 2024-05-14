@@ -19,7 +19,6 @@ reader = SimpleMFRC522()
 
 # Povezivanje na bazu
 conn = sqlite3.connect('library.db')
-cursor = conn.cursor()
 
 rfid_id = None  # Globalna varijabla
 
@@ -31,6 +30,7 @@ def add_book():
     naslov = simpledialog.askstring('Unos nove knjige', 'Naslov:')
     godina = simpledialog.askstring('Unos nove knjige', 'Godina izdanja:')
 
+    cursor = conn.cursor()
     # Ubacivanje informacija u bazu
     cursor.execute('INSERT INTO books (rfid_id, autor, naslov, godina) VALUES (?, ?, ?, ?)',
                    (rfid_id, autor, naslov, godina))
@@ -42,6 +42,7 @@ def add_book():
     print('Godina izdanja:', godina)
 
 def get_book_data(rfid_id):
+    cursor = conn.cursor()
     cursor.execute('SELECT * FROM books WHERE rfid_id=?', (rfid_id,))
     result = cursor.fetchone()
     if result:
