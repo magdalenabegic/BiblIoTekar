@@ -4,7 +4,7 @@ Please note that this project is currently in the development stage and is a wor
 
 The idea for this project emerged from my experiences during the first two years of my studies when I worked in a library. 
 
-This project is part of the final assignment for the 5th semester of the IoT (Internet of Things) program at VERN' University. While it's not yet complete, I've chosen to keep this repository visible on my profile to provide transparency about the ongoing work.
+This project is part of the final assignment for IoT (Internet of Things) program at VERN' University. While it's not yet complete, I've chosen to keep this repository visible on my profile to provide transparency about the ongoing work.
  
  ## Table of Contents
 - [Table of Contents](#table-of-contents)
