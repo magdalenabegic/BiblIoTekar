@@ -1,14 +1,7 @@
 import Link from "next/link"
 
-import styles from "./shelves.module.css"
+import styles from "./index.module.css"
 import Home from "../home"
-export const getServerSideProps = async (context) => {
-    return {
-        props: {
-            name: context.params.shelves
-        }
-    }
-}
  
 export default function PageIndex() {
     return (

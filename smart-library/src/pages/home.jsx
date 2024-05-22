@@ -22,13 +22,13 @@ const Home = () => {
         <Image src={admin} alt="admin" />
         Admin
       </div>
-      <Link href="/reports/report">
+      <Link href="/reports">
         <div className={styles.izvjestaji}>
             <Image src={barChart} alt="barChart" />
             Izvještaji
         </div>
       </Link>
-      <Link href="/shelves/shelves">
+      <Link href="/shelves">
         <div className={styles.pregledPolica}>  
             <Image src={polica} alt="polica" />
             Pregled polica
