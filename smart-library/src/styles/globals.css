@@ -1,4 +1,4 @@
-html,
+/* html,
 body {
   padding: 0;
   margin: 0;
@@ -13,4 +13,29 @@ a {
 
 * {
   box-sizing: border-box;
+} */
+
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
+body {
+  margin: 0;
+  line-height: normal;
+}
+:root {
+  /* fonts */
+  --font-poppins: Poppins;
+
+  /* font sizes */
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+
+  /* Colors */
+  --grey: #404040;
+  --white: #f4f5f6;
+  --greywhite: #f7f7f7;
+  --pretty-green: #49bca0;
+  --color-black: #000;
+  --black: #1e1e1e;
+
+  /* Border radiuses */
+  --br-5xs: 8px;
 }

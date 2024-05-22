@@ -13,7 +13,7 @@ export default function PageIndex({ name }) {
         <div>
             Bok, {name}!
 
-            <Link href="/hello">Bok home</Link>
+            <Link href="/home">Bok home</Link>
         </div>
     )
 }
