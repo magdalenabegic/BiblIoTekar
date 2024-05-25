@@ -1,4 +1,4 @@
-# Smart bookshelf project
+# Smart library project
 
 Please note that this project is currently in the development stage and is a work in progress. 
 
