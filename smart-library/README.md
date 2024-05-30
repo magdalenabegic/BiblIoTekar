@@ -1,29 +1,40 @@
-# Create T3 App
+# Smart Library App
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+## How do I use this?
 
-## What's next? How do I make an app with this?
-
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
-
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+If you are not familiar with the different technologies used in this project, please refer to the respective docs.
 
 - [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
 - [Drizzle](https://orm.drizzle.team)
 - [Tailwind CSS](https://tailwindcss.com)
 - [tRPC](https://trpc.io)
 
-## Learn More
+## Very basic structure
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+### Routing
 
-- [Documentation](https://create.t3.gg/)
-- [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+The [pages folder](./src/pages) is where all the routes are located.
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+- A file named `my-page.tsx` will be rendered on the route `/my-page`.
+- A file named `my-other-page/index.tsx` (a file `index.tsx` in a folder named `my-other-page`) will be rendered on the route `/my-other-page` (or `/my-other-page/`).
+- A file named `my-other-page/something-else.tsx` will be rendered on the route `/my-other-page/something-else`.
+- A file named `my-other-page/blog-posts/[blogPostId].tsx` will be rendered on the route `/my-other-page/blog-posts/1`, `/my-other-page/blog-posts/a-blog-post`, etc. Aka. whenever you put any part of the filename in square brackets (`[` and `]`), it will be treated as a dynamic route segment and can be replaced with any value in the URL (see [dynamic routes](https://nextjs.org/docs/routing/dynamic-routes) for more information).
 
-## How do I deploy this?
+### Talking with the backend
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+Talking with the router is abstracted away using tRPC.
+tRPC has a concept of "routers" that can be used to route requests to the backend.
+
+The [routers folder](./src/server/api/routers/) is where all the backend logic is located.
+
+If you are not familiar with tRPC, please refer to the [tRPC docs](https://trpc.io/docs).
+
+## Useful commands
+
+These are some commands that you will probably use often while developing:
+
+- `npm run dev` - Run the dev server with hot reloading. Will be your most common command
+- `npm run build` - Build the project for production. To start it, run `npm run start`
+- `npm run drizzle-studio` - Start drizzle studio, a nice web UI for your database
+- `npm run migrate` - Run database migrations
+- `npm run create-migration` - Create a new database migration from the [drizzle schema](./src/server/api/db/schema.ts)

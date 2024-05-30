@@ -1,29 +1,13 @@
-/* html,
-body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-a {
-  color: inherit;
-  text-decoration: none;
-}
-
-* {
-  box-sizing: border-box;
-} */
-
-@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap");
 body {
   margin: 0;
   line-height: normal;
 }
-:root {
-  /* fonts */
-  --font-poppins: Poppins;
 
+:root {
   /* font sizes */
   --font-size-sm: 14px;
   --font-size-base: 16px;
@@ -38,4 +22,12 @@ body {
 
   /* Border radiuses */
   --br-5xs: 8px;
+}
+
+#__next {
+  @apply flex flex-1 flex-col;
+}
+
+html body {
+  line-height: normal;
 }
