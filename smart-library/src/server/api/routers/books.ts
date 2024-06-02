@@ -91,4 +91,19 @@ export const booksRouter = createTRPCRouter({
         };
       });
     }),
+
+  getByLocation: publicProcedure
+    .input(z.object({ locationId: z.number().optional() }))
+    .query(({ input }) => {
+      return db.query.books.findMany({
+        where: (fields, op) => input.locationId ? op.eq(fields.locationId, input.locationId) : undefined,
+        with: {
+          location: {
+            columns: {
+              name: true,
+            },
+          },
+        },
+      });
+    }),
 });

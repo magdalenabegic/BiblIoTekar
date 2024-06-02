@@ -8,6 +8,7 @@ import { booksRouter } from "./routers/books";
  */
 export const appRouter = createTRPCRouter({
   books: booksRouter,
+  locations: booksRouter,
 });
 
 // export type definition of API
