@@ -5,6 +5,7 @@ import ImgAdmin from "./assets/admin.svg";
 import ImgBarChart from "./assets/bar-chart.svg";
 import ImgPolica from "./assets/polica.svg";
 import ImgKnjige from "./assets/knjige.svg";
+import ImgPending from "./assets/pending.svg";
 import Image from "next/image";
 import { cn } from "~/utils/css";
 import { poppins } from "~/utils/font";
@@ -41,24 +42,20 @@ const Navbar = () => {
           </div>
         </Link>
 
-        <Link href="/shelves">
+        <Link href="/locations">
           <div className="grid grid-cols-[minmax(0,1.5rem),minmax(0,1fr)] gap-2">
             <Image {...img(ImgPolica as never)} alt="polica" />
-            Pregled polica
+            Pregled lokacija
           </div>
         </Link>
 
+      <Link href="/pending">
         <div className="grid grid-cols-[minmax(0,1.5rem),minmax(0,1fr)] gap-2">
-          <Image {...img(ImgKnjige as never)} alt="knjige" />
-          Izvan police
+          <Image {...img(ImgPending as never)} alt="knjige" />
+          Pending
         </div>
+      </Link>
 
-        <Link href="/pending">
-          <div className="grid grid-cols-[minmax(0,1.5rem),minmax(0,1fr)] gap-2">
-            <div />
-            Pending
-          </div>
-        </Link>
       </div>
     </aside>
   );
