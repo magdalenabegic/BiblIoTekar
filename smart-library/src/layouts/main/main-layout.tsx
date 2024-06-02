@@ -19,9 +19,12 @@ const Navbar = () => {
   return (
     <aside className="flex flex-col items-center bg-gray-100 px-4">
       <Link href="/">
-        <div className="mt-12 flex items-start text-xl">
-          <Image {...img(ImgLogoTirkiz as never)} alt="logoTirkiz" />
-          <b>SmartLibrary</b>
+        <div className="mt-12 flex items-start text-2xl">
+          <Image {...img(ImgLogoTirkiz as never)} alt="logoTirkiz" className="w-8 h-8"/>
+          <b>Bibl
+            <span style={{ color: 'var(--pretty-green)' }}>IoT</span>
+            ekar
+          </b>
         </div>
       </Link>
 
