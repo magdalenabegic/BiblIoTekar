@@ -1,5 +1,10 @@
 import { useState } from "react";
 import { api } from "~/utils/api";
+import PolicaIcon from "/src/layouts/main/assets/polica.svg";
+import KutijaIcon from "/src/layouts/main/assets/kutija.svg";
+import PendingIcon from "/src/layouts/main/assets/pending.svg";
+
+const MAX_LOCATIONS = 4;
 
 const LocationPage = () => {
   const [selectedLocation, setSelectedLocation] = useState<number | undefined>(undefined);
@@ -20,25 +25,40 @@ const LocationPage = () => {
     return <div>Failed to load locations</div>;
   }
 
+  const getLocationIcon = (name: string) => {
+    switch (name) {
+      case 'Crvena polica':
+        return <img src={PolicaIcon} alt="Crvena polica" className="w-5 h-5" />;
+      case 'Plava polica':
+        return <img src={PolicaIcon} alt="Plava polica" className="w-5 h-5" />;
+      case 'Kutija':
+        return <img src={KutijaIcon} alt="Kutija" className="w-5 h-5" />;
+      case 'Izvan knjižnice':
+        return <img src={PendingIcon} alt="Izvan knjižnice" className="w-5 h-5" />;
+      default:
+        return null;
+    }
+  };
+
   return (
-    <div className="m-auto flex flex-col gap-8">
-      <div className="flex flex-col items-center gap-2">
-        <h1 className="text-center text-3xl font-bold">Locations</h1>
-        <div className="flex gap-2">
-          {locations.map((location) => (
+    <div className="flex flex-col gap-8 ml-10 mt-20">
+      <div className="flex flex-col gap-3">
+        <h1 className="align-left text-3xl font-bold">Pregled lokacija</h1>
+        <p className="align-left">Odaberite lokaciju za koju želite vidjeti pregled literature.</p>
+        <div className="flex gap-2 p-4 rounded-full bg-gray-100">
+          {locations && locations.map((location) => (
             <button
               key={location.id}
-              className="px-4 py-2 rounded bg-gray-200"
+              className={`flex items-center gap-2 px-4 py-2 rounded-full ${selectedLocation === location.id ? 'bg-gray-200' : 'bg-white'} border border-gray-300`}
               onClick={() => setSelectedLocation(location.id)}
             >
-              {location.id}
+              {getLocationIcon(location.name)} {location.name}
             </button>
           ))}
         </div>
       </div>
 
       <div className="flex flex-col items-center gap-2">
-        <h1 className="text-center text-3xl font-bold">Books</h1>
         {booksQuery.isLoading && <div>Loading books...</div>}
         {books && (
           <table className="border-separate border-spacing-x-4 border-spacing-y-1">
