@@ -2,14 +2,37 @@ import { relations, sql } from "drizzle-orm";
 import { int, sqliteTable, text } from "drizzle-orm/sqlite-core";
 import { BookStatus } from "~/utils/constants/book";
 
-export const locations = sqliteTable("locations", {
-  id: int("id").notNull().primaryKey(),
-  name: text("name").notNull(),
-  createdAt: int("created_at", {
+const timestamp = (columnName: string) =>
+  int(columnName, {
     mode: "timestamp_ms",
   })
     .notNull()
-    .default(sql`CURRENT_TIMESTAMP`),
+    .default(sql`(unixepoch() * 1000)`);
+
+const withTimestamps = (
+  opts: {
+    withUpdated?: boolean;
+    withDeleted?: boolean;
+  } = {},
+) => ({
+  createdAt: timestamp("created_at"),
+  ...(opts.withUpdated
+    ? {
+        updatedAt: timestamp("updated_at"),
+      }
+    : {}),
+  ...(opts.withDeleted
+    ? {
+        deletedAt: timestamp("deleted_at"),
+      }
+    : {}),
+});
+
+export const locations = sqliteTable("locations", {
+  id: int("id").notNull().primaryKey(),
+  name: text("name").notNull(),
+
+  ...withTimestamps(),
 });
 export type Location = typeof locations.$inferSelect;
 
@@ -20,16 +43,16 @@ export const books = sqliteTable("books", {
   year: int("year"),
   udk: text("udk"),
   rfidId: int("rfid_id"),
-  locationId: int("location_id").references(() => locations.id),
+  locationId: int("location_id").references(() => locations.id, {
+    onUpdate: "cascade",
+    onDelete: "set null",
+  }),
   bookStatus: text("book_status")
     .notNull()
     .default(BookStatus.Available)
     .$type<BookStatus>(),
-  createdAt: int("added_at", {
-    mode: "timestamp_ms",
-  })
-    .notNull()
-    .default(sql`CURRENT_TIMESTAMP`),
+
+  ...withTimestamps(),
 });
 export type Book = typeof books.$inferSelect;
 
@@ -44,16 +67,16 @@ export const bookLog = sqliteTable("book_log", {
   id: int("id").notNull().primaryKey(),
   bookId: int("book_id")
     .notNull()
-    .references(() => books.id),
+    .references(() => books.id, {
+      onUpdate: "cascade",
+      onDelete: "cascade",
+    }),
   bookStatus: text("book_status")
     .notNull()
     .default(BookStatus.Available)
     .$type<BookStatus>(),
   comment: text("comment"),
-  createdAt: int("created_at", {
-    mode: "timestamp_ms",
-  })
-    .notNull()
-    .default(sql`CURRENT_TIMESTAMP`),
+
+  ...withTimestamps(),
 });
 export type BookLog = typeof bookLog.$inferSelect;
