@@ -1,10 +1,10 @@
 import Link from "next/link";
+import { useRouter } from 'next/router';
 
 import ImgLogoTirkiz from "./assets/logo.svg";
 import ImgAdmin from "./assets/admin.svg";
 import ImgBarChart from "./assets/bar-chart.svg";
 import ImgPolica from "./assets/polica.svg";
-import ImgKnjige from "./assets/knjige.svg";
 import ImgPending from "./assets/pending.svg";
 import Image from "next/image";
 import { cn } from "~/utils/css";
@@ -17,6 +17,17 @@ const img = (obj: { src: string; width: number; height: number }) => ({
 });
 
 const Navbar = () => {
+  const router = useRouter();
+  const currentPath = router.pathname;
+
+  const currentPage = (path: string) => {
+    return currentPath === path ? 'bg-pretty-green text-white rounded-full' : 'text-black';
+  };
+
+  const currentIcon = (path: string) => {
+    return currentPath === path ? 'text-white' : 'text-black';
+  };
+
   return (
     <aside className="flex flex-col items-center bg-gray-100 px-4">
       <Link href="/">
@@ -30,32 +41,33 @@ const Navbar = () => {
       </Link>
 
       <div className="mt-32 flex flex-col gap-10 font-medium">
-        <div className="flex gap-2">
-          <Image {...img(ImgAdmin as never)} alt="admin" />
-          Admin
-        </div>
+        <Link href="/admin">
+          <div className={`flex items-center gap-2 px-4 py-2 ${currentPage('/admin')}`}>
+            <Image {...img(ImgAdmin as never)} alt="admin" className={currentIcon('/admin')} />
+            Admin
+          </div>
+        </Link>
 
         <Link href="/reports">
-          <div className="grid grid-cols-[minmax(0,1.5rem),minmax(0,1fr)] gap-2">
-            <Image {...img(ImgBarChart as never)} alt="barChart" />
+          <div className={`flex items-center gap-2 px-4 py-2 ${currentPage('/reports')}`}>
+            <Image {...img(ImgBarChart as never)} alt="barChart" className={currentIcon('/reports')} />
             Izvještaji
           </div>
         </Link>
 
         <Link href="/locations">
-          <div className="grid grid-cols-[minmax(0,1.5rem),minmax(0,1fr)] gap-2">
-            <Image {...img(ImgPolica as never)} alt="polica" />
+          <div className={`flex items-center gap-2 px-4 py-2 ${currentPage('/locations')}`}>
+            <Image {...img(ImgPolica as never)} alt="polica" className={currentIcon('/locations')} />
             Pregled lokacija
           </div>
         </Link>
 
-      <Link href="/pending">
-        <div className="grid grid-cols-[minmax(0,1.5rem),minmax(0,1fr)] gap-2">
-          <Image {...img(ImgPending as never)} alt="knjige" />
-          Pending
-        </div>
-      </Link>
-
+        <Link href="/pending">
+          <div className={`flex items-center gap-2 px-4 py-2 ${currentPage('/pending')}`}>
+            <Image {...img(ImgPending as never)} alt="knjige" className={currentIcon('/pending')} />
+            Pending
+          </div>
+        </Link>
       </div>
     </aside>
   );

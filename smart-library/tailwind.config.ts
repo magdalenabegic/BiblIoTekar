@@ -8,6 +8,9 @@ export default {
       fontFamily: {
         sans: ["var(--font-poppins)", ...fontFamily.sans],
       },
+      colors: {
+        'pretty-green': 'var(--pretty-green)',
+      },
     },
   },
   plugins: [],

@@ -3,6 +3,7 @@ import { api } from "~/utils/api";
 import PolicaIcon from "/src/layouts/main/assets/polica.svg";
 import KutijaIcon from "/src/layouts/main/assets/kutija.svg";
 import PendingIcon from "/src/layouts/main/assets/pending.svg";
+import { locationsRouter } from "~/server/api/routers/locations";
 
 const MAX_LOCATIONS = 4;
 
@@ -43,10 +44,10 @@ const LocationPage = () => {
   };
 
   return (
-    <div className="m-auto flex flex-col gap-8">
-      <div className="flex flex-col items-center gap-2">
-        <h1 className="text-center text-3xl font-bold">Pregled lokacija</h1>
-        <p className="text-center">Odaberite lokaciju za koju želite vidjeti pregled literature.</p>
+    <div className="m-20 flex flex-col gap-8">
+      <div className="flex flex-col gap-2">
+        <h1 className="text-left text-3xl font-bold">Pregled lokacija</h1>
+        <p className="text-left">Odaberite lokaciju za koju želite vidjeti pregled literature.</p>
         <div className="flex gap-2 p-4 rounded-full bg-gray-100">
           {locations.slice(0, MAX_LOCATIONS).map((location) => (
             <button
