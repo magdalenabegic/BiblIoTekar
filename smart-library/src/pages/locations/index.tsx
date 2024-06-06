@@ -17,6 +17,8 @@ const LocationPage = () => {
   const locations = locationsQuery.data;
   const books = booksQuery.data;
 
+  console.log('LOKACIJE', locations);
+
   if (locationsQuery.isLoading) {
     return <div>Loading locations...</div>;
   }
@@ -41,12 +43,12 @@ const LocationPage = () => {
   };
 
   return (
-    <div className="flex flex-col gap-8 ml-10 mt-20">
-      <div className="flex flex-col gap-3">
-        <h1 className="align-left text-3xl font-bold">Pregled lokacija</h1>
-        <p className="align-left">Odaberite lokaciju za koju želite vidjeti pregled literature.</p>
+    <div className="m-auto flex flex-col gap-8">
+      <div className="flex flex-col items-center gap-2">
+        <h1 className="text-center text-3xl font-bold">Pregled lokacija</h1>
+        <p className="text-center">Odaberite lokaciju za koju želite vidjeti pregled literature.</p>
         <div className="flex gap-2 p-4 rounded-full bg-gray-100">
-          {locations && locations.map((location) => (
+          {locations.slice(0, MAX_LOCATIONS).map((location) => (
             <button
               key={location.id}
               className={`flex items-center gap-2 px-4 py-2 rounded-full ${selectedLocation === location.id ? 'bg-gray-200' : 'bg-white'} border border-gray-300`}
@@ -59,6 +61,7 @@ const LocationPage = () => {
       </div>
 
       <div className="flex flex-col items-center gap-2">
+        <h1 className="text-center text-3xl font-bold">Books</h1>
         {booksQuery.isLoading && <div>Loading books...</div>}
         {books && (
           <table className="border-separate border-spacing-x-4 border-spacing-y-1">

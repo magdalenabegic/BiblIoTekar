@@ -9,14 +9,21 @@ export const booksRouter = createTRPCRouter({
   getAll: publicProcedure.query(() => {
     return db.query.books.findMany({
       with: {
-        location: {
-          columns: {
-            name: true,
-          },
-        },
+        location: true, // Fetch the related location
       },
     });
   }),
+
+  getByLocation: publicProcedure
+    .input(z.object({ locationId: z.number().optional() }))
+    .query(({ input }) => {
+      return db.query.books.findMany({
+        where: (fields, op) => input.locationId ? op.eq(fields.locationId, input.locationId) : undefined,
+        with: {
+          location: true, // Fetch the related location
+        },
+      });
+    }),
 
   getPending: publicProcedure.query(() => {
     return db.query.books.findMany({
@@ -89,21 +96,6 @@ export const booksRouter = createTRPCRouter({
           success: true as const,
           data: book,
         };
-      });
-    }),
-
-  getByLocation: publicProcedure
-    .input(z.object({ locationId: z.number().optional() }))
-    .query(({ input }) => {
-      return db.query.books.findMany({
-        where: (fields, op) => input.locationId ? op.eq(fields.locationId, input.locationId) : undefined,
-        with: {
-          location: {
-            columns: {
-              name: true,
-            },
-          },
-        },
       });
     }),
 });
