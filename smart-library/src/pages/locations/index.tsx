@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { api } from "~/utils/api";
+import Image from "next/image";
 import PolicaIcon from "/src/layouts/main/assets/polica.svg";
 import KutijaIcon from "/src/layouts/main/assets/kutija.svg";
 import PendingIcon from "/src/layouts/main/assets/pending.svg";
@@ -18,7 +19,11 @@ const LocationPage = () => {
   const locations = locationsQuery.data;
   const books = booksQuery.data;
 
-  console.log('LOKACIJE', locations);
+  const img = (obj: { src: string; width: number; height: number }) => ({
+    src: obj.src,
+    width: obj.width,
+    height: obj.height,
+  });
 
   if (locationsQuery.isLoading) {
     return <div>Loading locations...</div>;
@@ -31,13 +36,13 @@ const LocationPage = () => {
   const getLocationIcon = (name: string) => {
     switch (name) {
       case 'Crvena polica':
-        return <img src={PolicaIcon} alt="Crvena polica" className="w-5 h-5" />;
+        return <Image {...img(PolicaIcon as never)} alt="ikonaPolice" className="w-6 h-6"/>
       case 'Plava polica':
-        return <img src={PolicaIcon} alt="Plava polica" className="w-5 h-5" />;
+        return <Image {...img(PolicaIcon as never)} alt="ikonaPolice" className="w-6 h-6"/>
       case 'Kutija':
-        return <img src={KutijaIcon} alt="Kutija" className="w-5 h-5" />;
+        return <Image {...img(KutijaIcon as never)} alt="ikonaKutije" className="w-6 h-6"/>
       case 'Izvan knjižnice':
-        return <img src={PendingIcon} alt="Izvan knjižnice" className="w-5 h-5" />;
+        return <Image {...img(PendingIcon as never)} alt="ikonaPending" className="w-6 h-6"/>
       default:
         return null;
     }
