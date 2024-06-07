@@ -10,6 +10,10 @@ export default {
       },
       colors: {
         'pretty-green': 'var(--pretty-green)',
+        'white': 'var(--white)',
+        'greywhite': 'var(--greywhite)',
+        'color-black': 'var(--color-black)',
+        'black': 'var(--black)',
       },
     },
   },

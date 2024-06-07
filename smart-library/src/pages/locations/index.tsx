@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { api } from "~/utils/api";
+import { cn } from "~/utils/css";
+
 import Image from "next/image";
 import PolicaIcon from "/src/layouts/main/assets/polica.svg";
 import KutijaIcon from "/src/layouts/main/assets/kutija.svg";
@@ -10,6 +12,7 @@ const MAX_LOCATIONS = 4;
 
 const LocationPage = () => {
   const [selectedLocation, setSelectedLocation] = useState<number | undefined>(undefined);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const locationsQuery = api.locations.getAll.useQuery();
   const booksQuery = api.books.getByLocation.useQuery({ locationId: selectedLocation }, {
@@ -36,24 +39,36 @@ const LocationPage = () => {
   const getLocationIcon = (name: string) => {
     switch (name) {
       case 'Crvena polica':
-        return <Image {...img(PolicaIcon as never)} alt="ikonaPolice" className="w-6 h-6"/>
+        return <Image {...img(PolicaIcon as never)} alt="ikonaPolice" className="w-6 h-6" />
       case 'Plava polica':
-        return <Image {...img(PolicaIcon as never)} alt="ikonaPolice" className="w-6 h-6"/>
+        return <Image {...img(PolicaIcon as never)} alt="ikonaPolice" className="w-6 h-6" />
       case 'Kutija':
-        return <Image {...img(KutijaIcon as never)} alt="ikonaKutije" className="w-6 h-6"/>
+        return <Image {...img(KutijaIcon as never)} alt="ikonaKutije" className="w-6 h-6" />
       case 'Izvan knjižnice':
-        return <Image {...img(PendingIcon as never)} alt="ikonaPending" className="w-6 h-6"/>
+        return <Image {...img(PendingIcon as never)} alt="ikonaPending" className="w-6 h-6" />
       default:
         return null;
     }
   };
 
+  const handleSort = () => {
+    setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+  };
+
+  const sortedBooks = books?.slice().sort((a, b) => {
+    if (sortOrder === "asc") {
+      return a.year - b.year;
+    } else {
+      return b.year - a.year;
+    }
+  });
+
   return (
     <div className="m-20 flex flex-col gap-8">
       <div className="flex flex-col gap-2">
         <h1 className="text-left text-3xl font-bold">Pregled lokacija</h1>
-        <p className="text-left">Odaberite lokaciju za koju želite vidjeti pregled literature.</p>
-        <div className="flex gap-2 p-4 rounded-full bg-gray-100">
+        <p className="text-left pt-2">Odaberite lokaciju za koju želite vidjeti pregled literature.</p>
+        <div className="flex gap-2 pt-4 rounded-full">
           {locations.slice(0, MAX_LOCATIONS).map((location) => (
             <button
               key={location.id}
@@ -66,23 +81,25 @@ const LocationPage = () => {
         </div>
       </div>
 
-      <div className="flex flex-col items-center gap-2">
-        <h1 className="text-center text-3xl font-bold">Books</h1>
+      <div className="flex flex-col items-start gap-2">
+        <h1 className="text-gray-600 text-center text-2xl font-bold pt-4 pb-4">Pregled literature</h1>
         {booksQuery.isLoading && <div>Loading books...</div>}
-        {books && (
-          <table className="border-separate border-spacing-x-4 border-spacing-y-1">
+        {sortedBooks && (
+          <table className="border-separate p-4 border-spacing-x-12 border-spacing-y-1 border border-gray-300 rounded-lg">
             <thead>
-              <tr>
+              <tr className="text-gray-700">
                 <th>Naslov</th>
                 <th>Autor</th>
-                <th>Godina</th>
+                <th className="cursor-pointer" onClick={handleSort}>
+                  Godina {sortOrder === "asc" ? "↑" : "↓"}
+                </th>
                 <th>UDK</th>
                 <th>Status</th>
                 <th>Lokacija</th>
               </tr>
             </thead>
             <tbody>
-              {books.map((book) => (
+              {sortedBooks.map((book) => (
                 <tr key={book.id}>
                   <td>{book.title}</td>
                   <td>{book.author}</td>
@@ -95,7 +112,7 @@ const LocationPage = () => {
             </tbody>
           </table>
         )}
-        {selectedLocation && books?.length === 0 && <div>No books for this location</div>}
+        {selectedLocation && sortedBooks?.length === 0 && <div>No books for this location</div>}
       </div>
     </div>
   );
