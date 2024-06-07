@@ -1,5 +1,6 @@
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 import { booksRouter } from "./routers/books";
+import { locationsRouter } from "./routers/locations";
 
 /**
  * This is the primary router for your server.
@@ -8,7 +9,7 @@ import { booksRouter } from "./routers/books";
  */
 export const appRouter = createTRPCRouter({
   books: booksRouter,
-  locations: booksRouter,
+  locations: locationsRouter,
 });
 
 // export type definition of API
