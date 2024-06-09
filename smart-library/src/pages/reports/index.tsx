@@ -195,7 +195,7 @@ const Reports = () => {
             <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
-            <Bar dataKey="totalBooks" fill="#8884d8" />
+            <Bar dataKey="totalBooks" fill="#99CFEB" barSize={60}/>
           </BarChart>
         </ResponsiveContainer>
       </>
