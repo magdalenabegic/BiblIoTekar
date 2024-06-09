@@ -118,10 +118,6 @@ export default function Home() {
           </tbody>
         </table>
       </div>
-
-      <div>
-        <h1 className="text-center text-3xl font-bold">Locations</h1>
-      </div>
     </div>
   );
 }
