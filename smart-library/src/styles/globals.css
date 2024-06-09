@@ -17,8 +17,8 @@ body {
   --white: #f4f5f6;
   --greywhite: #f7f7f7;
   --pretty-green: #49bca0;
-  --color-black: #000;
-  --black: #1e1e1e;
+  --black-dark: #0E1110;
+  --black-light: #1e1e1e;
 
   /* Border radiuses */
   --br-5xs: 8px;

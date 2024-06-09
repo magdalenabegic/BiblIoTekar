@@ -66,7 +66,7 @@ const LocationPage = () => {
   return (
     <div className="m-20 flex flex-col gap-8">
       <div className="flex flex-col gap-2">
-        <h1 className="text-left text-3xl font-bold">Pregled lokacija</h1>
+        <h1 className="text-left text-3xl text-black-dark font-bold">Pregled lokacija</h1>
         <p className="text-left pt-2">Odaberite lokaciju za koju želite vidjeti pregled literature.</p>
         <div className="flex gap-2 pt-4 rounded-full">
           {locations.slice(0, MAX_LOCATIONS).map((location) => (
@@ -82,7 +82,7 @@ const LocationPage = () => {
       </div>
 
       <div className="flex flex-col items-start gap-2">
-        <h1 className="text-gray-600 text-center text-2xl font-bold pt-4 pb-4">Pregled literature</h1>
+        <h1 className="text-black-light text-center text-2xl font-bold pt-4 pb-4">Pregled literature</h1>
         {booksQuery.isLoading && <div>Loading books...</div>}
         {sortedBooks && (
           <table className="border-separate p-4 border-spacing-x-12 border-spacing-y-1 border border-gray-300 rounded-lg">
