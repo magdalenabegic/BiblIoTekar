@@ -13,7 +13,8 @@ const MAX_LOCATIONS = 4;
 const LocationPage = () => {
   const [selectedLocation, setSelectedLocation] = useState<number | undefined>(undefined);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
-
+  const [sortField, setSortField] = useState<"year" | "udk">("year");
+  
   const locationsQuery = api.locations.getAll.useQuery();
   const booksQuery = api.books.getByLocation.useQuery({ locationId: selectedLocation }, {
     enabled: !!selectedLocation, // Only run this query if a location is selected
@@ -51,17 +52,31 @@ const LocationPage = () => {
     }
   };
 
-  const handleSort = () => {
-    setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
-  };
+  const handleSort = (field: "year" | "udk") => {
+    if (sortField === field) {
+      setSortOrder((prevOrder) => (prevOrder === "asc" ? "desc" : "asc"));
+    } else {
+      setSortField(field);
+      setSortOrder("asc"); // Reset to ascending when switching fields
+    }
+  };  
 
   const sortedBooks = books?.slice().sort((a, b) => {
-    if (sortOrder === "asc") {
-      return a.year - b.year;
-    } else {
-      return b.year - a.year;
+    if (sortField === "year") {
+      if (sortOrder === "asc") {
+        return a.year - b.year;
+      } else {
+        return b.year - a.year;
+      }
+    } else if (sortField === "udk") {
+      if (sortOrder === "asc") {
+        return a.udk.localeCompare(b.udk);
+      } else {
+        return b.udk.localeCompare(a.udk);
+      }
     }
-  });
+    return 0;
+  });  
 
   return (
     <div className="m-20 flex flex-col gap-8">
@@ -90,10 +105,12 @@ const LocationPage = () => {
               <tr className="text-gray-700">
                 <th>Naslov</th>
                 <th>Autor</th>
-                <th className="cursor-pointer" onClick={handleSort}>
-                  Godina {sortOrder === "asc" ? "↑" : "↓"}
+                <th className="cursor-pointer" onClick={() => handleSort("year")}>
+                  Godina {sortField === "year" && (sortOrder === "asc" ? "↑" : "↓")}
                 </th>
-                <th>UDK</th>
+                <th className="cursor-pointer" onClick={() => handleSort("udk")}>
+                  UDK {sortField === "udk" && (sortOrder === "asc" ? "↑" : "↓")}
+                </th>
                 <th>Status</th>
                 <th>Lokacija</th>
               </tr>

@@ -32,10 +32,12 @@ const Reports = () => {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   const locationsQuery = api.locations.getAll.useQuery();
-  const booksQuery = api.books.getAll.useQuery(); // Assuming you have a query to get all books
+  const booksQuery = api.books.getAll.useQuery();
+  const timestampsQuery = api.books.getByTimestamp.useQuery();
 
   const locations = locationsQuery.data;
   const books = booksQuery.data;
+  const timestamps = timestampsQuery.data;
 
   const img = (obj: { src: string; width: number; height: number }) => ({
     src: obj.src,
@@ -57,7 +59,6 @@ const Reports = () => {
   if (!locations) {
     return <div>Failed to load locations</div>;
   }
-
   const getLocationIcon = (name: string) => {
     switch (name) {
       case 'Crvena polica':
@@ -85,7 +86,7 @@ const Reports = () => {
     }
   });
 
-  const processChartData = (books) => {
+  const processChartData = (timestamps) => {
     const daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const data = daysOfWeek.map(day => ({
       name: day,
@@ -93,11 +94,11 @@ const Reports = () => {
       lent: 0,
     }));
 
-    books.forEach(book => {
-      const day = new Date(book.added_at).getDay();
-      if (book.status === "available") {
+    timestamps.forEach(book => {
+      const day = new Date(book.createdAt).getDay();
+      if (book.bookStatus === "available") {
         data[day].available += 1;
-      } else if (book.status === "lent") {
+      } else if (book.bookStatus === "lent") {
         data[day].lent += 1;
       }
     });
@@ -130,7 +131,7 @@ const Reports = () => {
     }));
   };
 
-  const chartData = processChartData(books || []);
+  const chartData = processChartData(timestamps || []);
   const barChartData = processBarChartData(books || [], locations || []);
   const pieChartDataByUDK = processPieChartData(books?.filter(book => book.location?.name === 'Crvena polica') || [], 'udk');
   const pieChartDataByYear = processPieChartData(books?.filter(book => book.location?.name === 'Crvena polica') || [], 'year');

@@ -31,6 +31,12 @@ export const booksRouter = createTRPCRouter({
     });
   }),
 
+  getByTimestamp: publicProcedure.query(() => {
+    return db.query.books.findMany({
+      where: (fields, op) => op.gt(fields.createdAt, new Date(Date.now() - 24 * 60 * 60 * 1000)),
+    });
+  }),
+
   getOne: publicProcedure
     .input(
       z.object({
