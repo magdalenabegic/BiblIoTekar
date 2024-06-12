@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from typing import Union
 import RPi.GPIO as GPIO
 from mfrc522 import SimpleMFRC522
 import libsql_experimental as libsql
@@ -9,8 +10,9 @@ import os
 
 load_dotenv()
 
-LOCATION_ID = int(os.getenv("LOCATION_ID"))
-DB_NAME: str = os.getenv("TURSO_DATABASE_URL", "library.db")
+LOCATION_ID = os.getenv("LOCATION_ID")
+LOCATION_ID = int(LOCATION_ID) if LOCATION_ID else None
+DB_NAME = os.getenv("TURSO_DATABASE_URL", "library.db")
 DB_AUTH_TOKEN = os.getenv("TURSO_AUTH_TOKEN", None)
 print(f"DB_NAME={DB_NAME} | DB_AUTH_TOKEN={DB_AUTH_TOKEN} | LOCATION_ID={LOCATION_ID}")
 
@@ -43,12 +45,18 @@ def db_exec(*args):
     return res
 
 
-def update_book(rfid_id: int, location_id: int):
+def update_book(rfid_id: int, location_id: Union[int, None]):
     print(f"Updating rfid_id={rfid_id} to location={location_id}")
-    db_exec(
-        "UPDATE books set location_id=?, book_status='available' where rfid_id=?",
-        (location_id, rfid_id),
-    )
+    if location_id is None:
+        db_exec(
+            "UPDATE books set location_id=NULL, book_status='pending' where rfid_id=?",
+            (rfid_id,),
+        )
+    else:
+        db_exec(
+            "UPDATE books set location_id=?, book_status='available' where rfid_id=?",
+            (location_id, rfid_id),
+        )
 
 
 if __name__ == "__main__":
