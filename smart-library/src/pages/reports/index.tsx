@@ -164,7 +164,9 @@ const Reports = () => {
     {booksQuery.isLoading && <div>Loading books...</div>}
     {selectedLocation === 0 ? (
       <>
-        <ResponsiveContainer width="50%" height={400}>
+      <div className={styles.widget}>
+        <h1>Available vs Lent</h1>
+        <ResponsiveContainer width={800} height={400}>
           <AreaChart
             data={chartData}
             margin={{
@@ -179,10 +181,11 @@ const Reports = () => {
             <YAxis />
             <Tooltip />
             <Area type="monotone" dataKey="available" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
-            <Area type="monotone" dataKey="lent" stackId="1" stroke="#ff7f7f" fill="#ff7f7f" />
+            <Area type="monotone" dataKey="lent" stackId="1" stroke="#6489C6" fill="#6489C6" />
           </AreaChart>
         </ResponsiveContainer>
-        <ResponsiveContainer width="50%" height={400}>
+      </div>
+        <ResponsiveContainer width="50%" height={400} className={styles.widget}>
           <BarChart
             data={barChartData}
             margin={{
@@ -204,7 +207,7 @@ const Reports = () => {
       <>
         <div className={styles.widget}>
           <h1>Broj knjiga po UDK-u</h1>
-          <ResponsiveContainer width="100%" height={400}>
+          <ResponsiveContainer width={500} height={400}>
             <PieChart>
               <Pie dataKey="value" data={pieChartDataByUDK} cx="50%" cy="50%" outerRadius={100} fill="#8884d8" label>
                 {pieChartDataByUDK.map((entry, index) => (
@@ -218,7 +221,7 @@ const Reports = () => {
         </div>
         <div className={styles.widget}>
           <h1>Broj knjiga po godini</h1>
-          <ResponsiveContainer width="100%" height={400}>
+          <ResponsiveContainer width={500} height={400}>
             <PieChart>
               <Pie dataKey="value" data={pieChartDataByYear} cx="50%" cy="50%" outerRadius={100} fill="#82ca9d" label>
                 {pieChartDataByYear.map((entry, index) => (
