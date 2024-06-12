@@ -8,16 +8,14 @@ import KutijaIcon from "/src/layouts/main/assets/kutija.svg";
 import PendingIcon from "/src/layouts/main/assets/pending.svg";
 import { locationsRouter } from "~/server/api/routers/locations";
 
-const MAX_LOCATIONS = 4;
-
 const LocationPage = () => {
-  const [selectedLocation, setSelectedLocation] = useState<number | undefined>(undefined);
+  const [selectedLocation, setSelectedLocation] = useState<number | undefined | null>(undefined);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [sortField, setSortField] = useState<"year" | "udk">("year");
 
   const locationsQuery = api.locations.getAll.useQuery();
-  const booksQuery = api.books.getByLocation.useQuery({ locationId: selectedLocation }, {
-    enabled: !!selectedLocation, // Only run this query if a location is selected
+  const booksQuery = api.books.getByLocation.useQuery({ locationId: selectedLocation ?? null }, {
+    enabled: undefined !== selectedLocation, // Only run this query if a location is selected
     refetchInterval: 2000,
   });
 
@@ -85,7 +83,7 @@ const LocationPage = () => {
         <h1 className="text-left text-3xl text-black-dark font-bold">Pregled lokacija</h1>
         <p className="text-left pt-2">Odaberite lokaciju za koju želite vidjeti pregled literature.</p>
         <div className="flex gap-2 pt-4 rounded-full">
-          {locations.slice(0, MAX_LOCATIONS).map((location) => (
+          {locations.map((location) => (
             <button
               key={location.id}
               className={`flex items-center gap-2 px-4 py-2 rounded-full ${selectedLocation === location.id ? 'bg-gray-200' : 'bg-white'} border border-gray-300`}
@@ -94,6 +92,12 @@ const LocationPage = () => {
               {getLocationIcon(location.name)} {location.name}
             </button>
           ))}
+          <button
+            className={`flex items-center gap-2 px-4 py-2 rounded-full ${selectedLocation === null ? 'bg-gray-200' : 'bg-white'} border border-gray-300`}
+            onClick={() => setSelectedLocation(null)}
+          >
+            {getLocationIcon("Izvan knjižnice")} Izvan knjižnice
+          </button>
         </div>
       </div>
 

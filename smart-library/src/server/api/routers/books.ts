@@ -15,10 +15,13 @@ export const booksRouter = createTRPCRouter({
   }),
 
   getByLocation: publicProcedure
-    .input(z.object({ locationId: z.number().optional() }))
+    .input(z.object({ locationId: z.number().nullable() }))
     .query(({ input }) => {
       return db.query.books.findMany({
-        where: (fields, op) => input.locationId ? op.eq(fields.locationId, input.locationId) : undefined,
+        where: (fields, op) =>
+          input.locationId
+            ? op.eq(fields.locationId, input.locationId)
+            : op.and(op.isNull(fields.locationId), op.eq(fields.bookStatus, BookStatus.Lent)),
         with: {
           location: true, // Fetch the related location
         },
@@ -33,7 +36,7 @@ export const booksRouter = createTRPCRouter({
 
   getByTimestamp: publicProcedure.query(() => {
     return db.query.books.findMany({
-      where: (fields, op) => op.gt(fields.createdAt, new Date(Date.now() - 24 * 60 * 60 * 1000)),
+      // where: (fields, op) => op.gt(fields.createdAt, new Date(Date.now() - 24 * 60 * 60 * 1000)),
     });
   }),
 
