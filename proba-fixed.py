@@ -22,12 +22,16 @@ def main():
     spi.open(1, 0)  # Parametri (bus, device)
 
     reader = SimpleMFRC522()
+    last_rfid_id = None
     try:
         reader.READER.Write_MFRC522(0x26, 127)
         while True:
             rfid_id, _ = reader.read()
 
-            update_book(rfid_id, LOCATION_ID)
+            if rfid_id != last_rfid_id:
+                update_book(rfid_id, LOCATION_ID)
+
+            last_rfid_id = rfid_id
 
     except KeyboardInterrupt:
         os.exit(1)
@@ -47,16 +51,26 @@ def db_exec(*args):
 
 def update_book(rfid_id: int, location_id: Union[int, None]):
     print(f"Updating rfid_id={rfid_id} to location={location_id}")
+    book_status = None
+    book_id = None
     if location_id is None:
-        db_exec(
-            "UPDATE books set location_id=NULL, book_status='pending' where rfid_id=?",
+        book_status = "pending"
+        obj = db_exec(
+            "UPDATE books set location_id=NULL, book_status='pending' where rfid_id=? RETURNING id",
             (rfid_id,),
-        )
+        ).fetchone()
+        book_id = obj[0]
     else:
-        db_exec(
-            "UPDATE books set location_id=?, book_status='available' where rfid_id=?",
+        book_status = "available"
+        obj = db_exec(
+            "UPDATE books set location_id=?, book_status='available' where rfid_id=? RETURNING id",
             (location_id, rfid_id),
-        )
+        ).fetchone()
+        book_id = obj[0]
+    db_exec(
+        "INSERT INTO book_log (book_id, book_status) values (?, ?)",
+        (book_id, book_status),
+    )
 
 
 if __name__ == "__main__":
