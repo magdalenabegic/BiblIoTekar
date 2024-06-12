@@ -14,10 +14,11 @@ const LocationPage = () => {
   const [selectedLocation, setSelectedLocation] = useState<number | undefined>(undefined);
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
   const [sortField, setSortField] = useState<"year" | "udk">("year");
-  
+
   const locationsQuery = api.locations.getAll.useQuery();
   const booksQuery = api.books.getByLocation.useQuery({ locationId: selectedLocation }, {
     enabled: !!selectedLocation, // Only run this query if a location is selected
+    refetchInterval: 2000,
   });
 
   const locations = locationsQuery.data;
@@ -59,24 +60,24 @@ const LocationPage = () => {
       setSortField(field);
       setSortOrder("asc"); // Reset to ascending when switching fields
     }
-  };  
+  };
 
   const sortedBooks = books?.slice().sort((a, b) => {
-    if (sortField === "year") {
-      if (sortOrder === "asc") {
-        return a.year - b.year;
-      } else {
-        return b.year - a.year;
-      }
-    } else if (sortField === "udk") {
-      if (sortOrder === "asc") {
-        return a.udk.localeCompare(b.udk);
-      } else {
-        return b.udk.localeCompare(a.udk);
-      }
+    let order = 0;
+
+    switch (sortField) {
+      case "year":
+        order = (a.year ?? 0) - (b.year ?? 0);
+      case "udk":
+        order = a.udk?.localeCompare(b.udk ?? "") ?? 0;
     }
-    return 0;
-  });  
+
+    if (sortOrder === "asc") {
+      return order;
+    } else {
+      return -order;
+    }
+  });
 
   return (
     <div className="m-20 flex flex-col gap-8">
