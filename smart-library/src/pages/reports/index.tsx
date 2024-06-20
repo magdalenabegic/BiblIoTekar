@@ -164,44 +164,26 @@ const Reports = () => {
     {booksQuery.isLoading && <div>Loading books...</div>}
     {selectedLocation === 0 ? (
       <>
-      <div className={styles.widget}>
-        <h1>Available vs Lent</h1>
-        <ResponsiveContainer width={800} height={400}>
-          <AreaChart
-            data={chartData}
-            margin={{
-              top: 10,
-              right: 30,
-              left: 0,
-              bottom: 0,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Area type="monotone" dataKey="available" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
-            <Area type="monotone" dataKey="lent" stackId="1" stroke="#6489C6" fill="#6489C6" />
-          </AreaChart>
-        </ResponsiveContainer>
+        <div className={styles.widget}>
+          <h1>Broj knjiga po lokaciji</h1>
+          <ResponsiveContainer width={600} height={400} >  
+            <BarChart
+              data={barChartData}
+              margin={{
+                top: 10,
+                right: 30,
+                left: 0,
+                bottom: 0,
+              }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Bar dataKey="totalBooks" fill="#99CFEB" barSize={60}/>
+            </BarChart>
+          </ResponsiveContainer>
       </div>
-        <ResponsiveContainer width="50%" height={400} className={styles.widget}>
-          <BarChart
-            data={barChartData}
-            margin={{
-              top: 10,
-              right: 30,
-              left: 0,
-              bottom: 0,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip />
-            <Bar dataKey="totalBooks" fill="#99CFEB" barSize={60}/>
-          </BarChart>
-        </ResponsiveContainer>
       </>
     ) : selectedLocation === locations.find(location => location.name === 'Crvena polica')?.id ? (
       <>

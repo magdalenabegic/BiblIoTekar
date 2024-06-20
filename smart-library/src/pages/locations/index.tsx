@@ -1,12 +1,10 @@
 import { useState } from "react";
 import { api } from "~/utils/api";
-import { cn } from "~/utils/css";
 
 import Image from "next/image";
 import PolicaIcon from "/src/layouts/main/assets/polica.svg";
 import KutijaIcon from "/src/layouts/main/assets/kutija.svg";
 import PendingIcon from "/src/layouts/main/assets/pending.svg";
-import { locationsRouter } from "~/server/api/routers/locations";
 
 const LocationPage = () => {
   const [selectedLocation, setSelectedLocation] = useState<number | undefined | null>(undefined);

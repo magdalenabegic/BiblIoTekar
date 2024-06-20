@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { api } from "~/utils/api";
 const PagePending = () => {
   const { data: pendingBooks, error, isLoading } = api.books.getPending.useQuery();
@@ -9,7 +8,7 @@ const PagePending = () => {
 
   return (<div className="flex justify-center items-center min-h-screen">
     <div className="flex flex-col items-center gap-2">
-      <h1 className="text-black-light text-center text-2xl font-bold pb-4">Procesi u tijeku</h1>
+      <h1 className="text-black-light text-center text-2xl font-bold pb-4">Trenutni procesi</h1>
       <div className="w-full max-w-4xl">
         {pendingBooks && (
           <table className="border-separate p-4 border-spacing-x-12 border-spacing-y-1 border border-gray-300 rounded-lg">
