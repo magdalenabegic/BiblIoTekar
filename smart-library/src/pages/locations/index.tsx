@@ -106,27 +106,27 @@ const LocationPage = () => {
           <table className="border-separate p-4 border-spacing-x-12 border-spacing-y-1 border border-gray-300 rounded-lg">
             <thead>
               <tr className="text-gray-700">
-                <th>Naslov</th>
-                <th>Autor</th>
-                <th className="cursor-pointer" onClick={() => handleSort("year")}>
+                <th className="py-2 px-4 border-b">Naslov</th>
+                <th className="py-2 px-4 border-b">Autor</th>
+                <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort("year")}>
                   Godina {sortField === "year" && (sortOrder === "asc" ? "↑" : "↓")}
                 </th>
-                <th className="cursor-pointer" onClick={() => handleSort("udk")}>
+                <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort("udk")}>
                   UDK {sortField === "udk" && (sortOrder === "asc" ? "↑" : "↓")}
                 </th>
-                <th>Status</th>
-                <th>Lokacija</th>
+                <th className="py-2 px-4 border-b">Status</th>
+                <th className="py-2 px-4 border-b">Lokacija</th>
               </tr>
             </thead>
             <tbody>
               {sortedBooks.map((book) => (
                 <tr key={book.id}>
-                  <td>{book.title}</td>
-                  <td>{book.author}</td>
-                  <td>{book.year}</td>
-                  <td className="text-center">{book.udk ?? "/"}</td>
-                  <td>{book.bookStatus}</td>
-                  <td>{book.location?.name ?? <em className="italic">Nepoznato</em>}</td>
+                  <td className="py-2 px-4 border-b">{book.title}</td>
+                  <td className="py-2 px-4 border-b">{book.author}</td>
+                  <td className="py-2 px-4 border-b">{book.year}</td>
+                  <td className="py-2 px-4 border-b">{book.udk ?? "/"}</td>
+                  <td className="py-2 px-4 border-b">{book.bookStatus}</td>
+                  <td className="py-2 px-4 border-b">{book.location?.name ?? <em className="italic">Nepoznato</em>}</td>
                 </tr>
               ))}
             </tbody>
