@@ -64,8 +64,10 @@ const LocationPage = () => {
     switch (sortField) {
       case "year":
         order = (a.year ?? 0) - (b.year ?? 0);
+        break;
       case "udk":
         order = a.udk?.localeCompare(b.udk ?? "") ?? 0;
+        break;
     }
 
     if (sortOrder === "asc") {
