@@ -25,7 +25,7 @@ const Navbar = () => {
   };
 
   const currentIcon = (path: string) => {
-    return currentPath === path ? 'text-white' : 'text-black';
+    return currentPath === path ? 'icon-white' : 'icon-black';
   };
 
   return (
