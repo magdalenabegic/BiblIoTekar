@@ -28,10 +28,7 @@ def main():
         while True:
             rfid_id, _ = reader.read()
 
-            if rfid_id != last_rfid_id:
-                update_book(rfid_id, LOCATION_ID)
-
-            last_rfid_id = rfid_id
+            update_book(rfid_id, LOCATION_ID)
 
     except KeyboardInterrupt:
         os.exit(1)
