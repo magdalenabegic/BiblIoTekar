@@ -31,6 +31,7 @@ By leveraging RFID technology and IoT (Internet of Things), librarians can gain 
     cd your-project
 3. Install dependencies:
     pip install -r requirements.txt
+4. The main python script is currently proba-fixed.py
 
 ## Used Equipment
 
