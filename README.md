@@ -37,4 +37,3 @@ By leveraging RFID technology and IoT (Internet of Things), librarians can gain 
 - Raspberry Pi 4
 - RFID reader MFRC-522, 13.56MHz + RFID stickers (tags) for books
 - Protoboard, red and black pvc isolated cables (or breadboard and jump wires)
-- a display screen
