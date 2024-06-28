@@ -1,0 +1,6 @@
+mfrc522
+dotenv
+spidev
+cmake
+Rust
+libsql-experimental

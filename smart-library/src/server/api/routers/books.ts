@@ -2,7 +2,7 @@ import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "../trpc";
 import { db } from "../db";
 import { bookLog, books } from "../db/schema";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { BookStatus } from "~/utils/constants/book";
 
 export const booksRouter = createTRPCRouter({
@@ -107,4 +107,15 @@ export const booksRouter = createTRPCRouter({
         };
       });
     }),
+
+  countLentBooks: publicProcedure.query(async () => {
+    const [result] = await db
+      .select({
+        count: sql`count(*)`.as('count'),
+      })
+      .from(books)
+      .where(eq(books.bookStatus, BookStatus.Lent));
+
+    return result ? result.count : 0;
+  }),
 });
