@@ -10,10 +10,11 @@ The idea for this project emerged from my experiences during the first two years
 This project is part of the final assignment for IoT (Internet of Things) program at VERN' University. While it's not yet complete, I've chosen to keep this repository visible on my profile to provide transparency about the ongoing work.
  
  ## Table of Contents
-- [Table of Contents](#table-of-contents)
-- [Project Description](#project-description)
-- [Installation](#installation)
-- [Used Equipment](#used-equipment)
+- [Smart library project](#smart-library-project)
+  - [Table of Contents](#table-of-contents)
+  - [Project Description](#project-description)
+  - [Installation](#installation)
+  - [Used Equipment](#used-equipment)
 
 
 ## Project Description
@@ -33,7 +34,12 @@ By leveraging RFID technology and IoT (Internet of Things), librarians can gain 
 2. Navigate to the project directory:
     cd your-project
 3. Install dependencies:
-    pip install -r requirements.txt
+    mfrc522
+    dotenv
+    spidev
+    cmake
+    Rust
+    libsql-experimental
 4. The main python script is currently proba-fixed.py
 5. web application is located in smart-library directory, for its installation and other details please look at its README file
 6. For communication with Raspberry Pis I used SSH

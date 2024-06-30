@@ -80,3 +80,10 @@ export const bookLog = sqliteTable("book_log", {
   ...withTimestamps(),
 });
 export type BookLog = typeof bookLog.$inferSelect;
+
+export const bookLogRelations = relations(bookLog, ({ one }) => ({
+  book: one(books, {
+    fields: [bookLog.bookId],
+    references: [books.id],
+  }),
+}));

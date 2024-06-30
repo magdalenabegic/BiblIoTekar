@@ -113,7 +113,7 @@ export const booksRouter = createTRPCRouter({
       .select({
         count: sql`count(*)`.as('count'),
       })
-      .from(books)
+      .from(bookLog)
       .where(eq(books.bookStatus, BookStatus.Lent));
 
     return result ? result.count : 0;
